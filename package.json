@@ -1,0 +1,17 @@
+{
+  "name": "jux-layout",
+  "version": "1.0.0",
+  "description": "",
+  "main": "DefaultIndexer.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Jamie Owen <hello@jamieowen.com> (=)",
+  "license": "ISC",
+  "devDependencies": {
+    "tape": "^4.2.0"
+  }
+}
