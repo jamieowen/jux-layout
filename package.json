@@ -13,5 +13,8 @@
   "license": "ISC",
   "devDependencies": {
     "tape": "^4.2.0"
+  },
+  "dependencies": {
+    "signals": "^1.0.0"
   }
 }

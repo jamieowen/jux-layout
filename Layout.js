@@ -1,31 +1,50 @@
 
-var defaultStrategy = require( './horizontal' );
-var defaultProxy  	= require( './LayoutObjectProxy' );
-var defaultIndexer  = require( './DefaultIndexer' );
+var Rect = require( 'jux-bounds');
+var Signal = require( 'signals' );
 
-/**
- *
- * Layout.
- *
- * @constructor
- */
+var defaultOpts = {
+	layout: require( './layouts/horizontal' ),
+	proxy: require( './object/LayoutObjectProxy' ),
+	indexer: require( './indexers/default' ),
+	dataIsRenderer: false
+};
 
-var Layout = function( data, strategy, proxy, indexer ){
+var defaultLayoutOpts = {
+	itemWidth: 0,
+	itemHeight: 0,
+	xSpacing: 0,
+	ySpacing: 0
+};
 
-	this.data = null;
-	this.strategy = null; // set via setMethod
+var boundsHelper = new Rect();
 
-	data = data || null;
-	strategy = strategy || defaultStrategy;
+var Layout = function( data, layoutOpts, opts ){
 
-	this.proxy = proxy || defaultProxy;
-	this.indexer = indexer || new defaultIndexer( this.proxy );
+	opts = opts || defaultOpts;
 
-	this.opts = {};
-	this.needsUpdate = false;
+	this._data = null;
+	this._layout = null;
+	this._indexer = null;
+	this._bounds = new Rect();
+	this._layoutObjects = [];
+	this._results = [];
 
-	this.setStrategy( strategy );
-	this.setData( data );
+	this.data = data;
+
+	this.layout = opts.layout || defaultOpts.layout;
+	this.indexer = opts.indexer || defaultOpts.indexer;
+	this._proxy = opts.proxy || defaultOpts.proxy;
+
+	opts.dataIsRenderer === undefined ? defaultOpts.dataIsRenderer : opts.dataIsRenderer;
+
+	this.needsLayoutUpdate = true;
+	this.needsIndexerUpdate = true;
+
+	this._opts = opts;
+	this._layoutOpts = layoutOpts || defaultLayoutOpts;
+
+	this.onLayoutUpdated = new Signal();
+
 };
 
 
@@ -34,68 +53,110 @@ module.exports = Layout;
 
 Layout.prototype = {
 
-	setStrategy: function( strategy ){
-
-		if( this.strategy === strategy ){
-			return;
-		}
-
-		this.strategy = strategy;
-		this.needsUpdate = true;
-	},
-
-	setData: function( data ){
-
-		if( this.data === data ){
-			return;
-		}
-
-		this.data = data;
-		this.needsUpdate = true;
-	},
-
 	update: function(){
 
-		if( this.needsUpdate ){
+		if( this.needsLayoutUpdate ){
+			this.needsLayoutUpdate = false;
+			this.needsIndexerUpdate = true;
 
-			this.needsUpdate = false;
+			this._layoutObjects.splice(0);
 
-			if( this.data ){
+			var data,i,obj;
+			var bounds = boundsHelper;
 
-				var layout = this.strategy;
-				var proxy = this.proxy;
-				var layoutObj,data;
-				var opts = this.opts;
-
-				var indexer = this.indexer;
-
-				for( var i = 0; i<this.data.length; i++ ){
-					data = this.data[i];
-
-					// pass in data to create()
-					// data can be used to alter renderer type
-					layoutObj = proxy.create( data );
-
-					// data object not set above.
-					// but at this point.. ??
-					proxy.data( layoutObj, data );
-
-					// layout with the strategy function
-					layout( i, data, layoutObj, proxy, opts );
-
-					// add to index ( array, spatial index, etc )
-					indexer.add( layoutObj );
+			for( i = 0; i<this._data.length; i++ ){
+				data = this._data[i];
+				if( this._opts.dataIsRenderer ){
+					obj = data;
+				}else{
+					obj = this._proxy.create( data );
+					this._proxy.data.set( obj, data );
 				}
+				this._layout( i, data, obj, this._proxy, this._layoutOpts );
+
+				this._proxy.bounds.get( obj, bounds );
+
+				// bounds expand() ?
+				this._bounds.left = Math.min( bounds.left, this._bounds.left );
+				this._bounds.top = Math.min( bounds.top, this._bounds.top );
+				this._bounds.right = Math.max( bounds.right, this._bounds.right );
+				this._bounds.bottom = Math.max( bounds.bottom, this._bounds.bottom );
 			}
 
 		}
+
+		if( this.needsIndexerUpdate ){
+			this.needsIndexerUpdate = false;
+			this._indexer.index( this._layoutObjects, this._proxy )
+		}
+
 	},
 
 	find: function( viewBounds, results ){
 
-		var results = results || [];
-		return this.indexer.find( viewBounds, results );
+		if( results ){
+			return this._indexer.find( viewBounds, results );
+		}else{
+			this._results.splice(0);
+			return this._indexer.find( viewBounds, this._results );
+		}
 
 	}
 
 };
+
+Object.defineProperties( Layout.prototype, {
+
+	data: {
+		get: function(){
+			return this._data;
+		},
+
+		set: function( data ){
+			if( this._data === data ){
+				return;
+			}
+
+			this._data = data;
+
+			this.needsLayoutUpdate = true;
+			this.onLayoutUpdated.dispatch();
+
+		}
+	},
+
+	layout: {
+		get: function(){
+			return this._layout;
+		},
+
+		set: function( layout ){
+			if( this._layout === layout ){
+				return;
+			}
+
+			this._layout = layout;
+
+			this.needsLayoutUpdate = true;
+			this.onLayoutUpdated.dispatch();
+		}
+	},
+
+	indexer: {
+		get: function(){
+			return this._indexer;
+		},
+
+		set: function( indexer ){
+			if( this._indexer === indexer ){
+				return;
+			}
+
+			this._indexer = indexer;
+
+			this.needsIndexerUpdate = true;
+
+		}
+	}
+
+});
