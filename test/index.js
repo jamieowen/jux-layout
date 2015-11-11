@@ -1,2 +1,2 @@
 
-var BasicsTest = require( './Layout.basics.js' );
+require( 'require-dir' )( '.' );

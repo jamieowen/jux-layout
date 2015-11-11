@@ -14,6 +14,10 @@ test( 'Layout basics.', function( t ){
 	var h = 55;
 	var s = 10;
 
+	// placeholder for
+	var point = {};
+	var bounds = {};
+
 	// Test layout with inline layout method.
 
 	var layout = new Layout( data, {
@@ -25,7 +29,15 @@ test( 'Layout basics.', function( t ){
 		layout: function( i, data, obj, prevObj, proxy, lopts ){
 
 			var x = 0;
-			var y = i * lopts.itemHeight + ( i * lopts.itemSpacing );
+			var y;
+			if( i < 5 ){
+				y = i * lopts.itemHeight + ( i * lopts.itemSpacing );
+			}else{
+				// test previous obj access to set position.
+				proxy.position.get( prevObj, point );
+				proxy.size.get( prevObj, bounds );
+				y = point.y + bounds.height + lopts.itemSpacing;
+			}
 
 			proxy.position.set( obj, x, y );
 			proxy.size.set( obj, lopts.itemWidth, lopts.itemHeight );
