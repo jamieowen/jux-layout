@@ -1,35 +1,35 @@
 
-var Rect = require( 'jux-bounds');
-var Signal = require( 'signals' );
+var Signal 		   = require( 'signals' );
+
+var Bounds 		   = require( 'jux-bounds');
+
+var DefaultProxy   = require( 'jux-bounds-proxy' );
+var DefaultLayout  = require( './layouts/horizontal' );
+var DefaultIndexer = require( './indexers/default' );
 
 var defaultOpts = {
-	layout: require( './layouts/horizontal' ),
-	proxy: require( './object/LayoutObjectProxy' ),
-	indexer: require( './indexers/default' ),
+	layout: DefaultLayout,
+	layoutOpts: DefaultLayout.defaultOpts,
+	proxy: new DefaultProxy(),
+	indexer: new DefaultIndexer(),
 	dataIsRenderer: false
 };
 
-var defaultLayoutOpts = {
-	itemWidth: 0,
-	itemHeight: 0,
-	xSpacing: 0,
-	ySpacing: 0
-};
+var boundsHelper = new Bounds();
 
-var boundsHelper = new Rect();
-
-var Layout = function( data, layoutOpts, opts ){
+var Layout = function( data, opts ){
 
 	opts = opts || defaultOpts;
 
-	this._data = null;
+	this.onLayoutUpdated = new Signal();
+
+	this._data = data;
 	this._layout = null;
 	this._indexer = null;
-	this._bounds = new Rect();
-	this._layoutObjects = [];
 	this._results = [];
 
-	this.data = data;
+	this.bounds = new Bounds();
+	this.objects = [];
 
 	this.layout = opts.layout || defaultOpts.layout;
 	this.indexer = opts.indexer || defaultOpts.indexer;
@@ -41,10 +41,6 @@ var Layout = function( data, layoutOpts, opts ){
 	this.needsIndexerUpdate = true;
 
 	this._opts = opts;
-	this._layoutOpts = layoutOpts || defaultLayoutOpts;
-
-	this.onLayoutUpdated = new Signal();
-
 };
 
 
@@ -59,9 +55,11 @@ Layout.prototype = {
 			this.needsLayoutUpdate = false;
 			this.needsIndexerUpdate = true;
 
-			this._layoutObjects.splice(0);
+			this.objects.splice(0);
+			this.bounds.set(0,0,0,0);
 
 			var data,i,obj;
+			var prevObj = null;
 			var bounds = boundsHelper;
 
 			for( i = 0; i<this._data.length; i++ ){
@@ -72,22 +70,27 @@ Layout.prototype = {
 					obj = this._proxy.create( data );
 					this._proxy.data.set( obj, data );
 				}
-				this._layout( i, data, obj, this._proxy, this._layoutOpts );
+
+				this._layout( i, data, obj, prevObj, this._proxy, this._opts.layoutOpts );
 
 				this._proxy.bounds.get( obj, bounds );
 
 				// bounds expand() ?
-				this._bounds.left = Math.min( bounds.left, this._bounds.left );
-				this._bounds.top = Math.min( bounds.top, this._bounds.top );
-				this._bounds.right = Math.max( bounds.right, this._bounds.right );
-				this._bounds.bottom = Math.max( bounds.bottom, this._bounds.bottom );
+				this.bounds.x = Math.min( bounds.left, this.bounds.left );
+				this.bounds.y = Math.min( bounds.top, this.bounds.top );
+				this.bounds.width = Math.max( bounds.right, this.bounds.right );
+				this.bounds.height = Math.max( bounds.bottom, this.bounds.bottom );
+
+				this.objects.push( obj );
+
+				prevObj = obj;
 			}
 
 		}
 
 		if( this.needsIndexerUpdate ){
 			this.needsIndexerUpdate = false;
-			this._indexer.index( this._layoutObjects, this._proxy )
+			this._indexer.index( this.objects, this._proxy )
 		}
 
 	},

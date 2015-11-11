@@ -1,5 +1,5 @@
 
-var Rect 	   = require( 'jux-bounds/Rect' );
+var Rect 	   = require( 'jux-bounds' );
 var intersects = require( 'jux-bounds/intersects' );
 
 var helperRect = new Rect();
