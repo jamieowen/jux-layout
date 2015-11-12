@@ -2,45 +2,50 @@
 var Signal 		   = require( 'signals' );
 
 var Bounds 		   = require( 'jux-bounds');
-
 var DefaultProxy   = require( 'jux-bounds-proxy' );
 var DefaultLayout  = require( './layouts/horizontal' );
 var DefaultIndexer = require( './indexers/default' );
 
-var defaultOpts = {
-	layout: DefaultLayout,
-	layoutOpts: DefaultLayout.defaultOpts,
-	proxy: new DefaultProxy(),
-	indexer: new DefaultIndexer(),
-	dataIsRenderer: false
+var defaultOpts = function() {
+	return {
+		layout: DefaultLayout,
+		layoutOpts: DefaultLayout.defaultOpts,
+		proxy: new DefaultProxy(),
+		indexer: new DefaultIndexer(),
+		dataIsRenderer: false
+	};
 };
 
 var boundsHelper = new Bounds();
 
-var Layout = function( data, opts ){
+var Layout = function( data, optsOrLayout ){
 
-	opts = opts || defaultOpts;
-
-	this.onLayoutUpdated = new Signal();
+	if( typeof optsOrLayout === 'function' ){
+		this._layout = optsOrLayout;
+		this.layoutOpts = optsOrLayout.defaultOpts;
+	}else
+	if( typeof optsOrLayout === 'object' ){
+		this._layout = optsOrLayout.layout || DefaultLayout;
+		this.layoutOpts = optsOrLayout.layoutOpts || this._layout.defaultOpts;
+	}else{
+		this._layout = DefaultLayout;
+		this.layoutOpts = DefaultLayout.defaultOpts;
+		optsOrLayout = {};
+	}
 
 	this._data = data;
-	this._layout = null;
-	this._indexer = null;
+	this._proxy = optsOrLayout.proxy || new DefaultProxy();
+	this._indexer = optsOrLayout.indexer || new DefaultIndexer();
+	this._dataIsRenderer = optsOrLayout.dataIsRenderer === undefined ? false : optsOrLayout.dataIsRenderer;
 	this._results = [];
 
 	this.bounds = new Bounds();
 	this.objects = [];
-
-	this.layout = opts.layout || defaultOpts.layout;
-	this.indexer = opts.indexer || defaultOpts.indexer;
-	this._proxy = opts.proxy || defaultOpts.proxy;
-
-	opts.dataIsRenderer === undefined ? defaultOpts.dataIsRenderer : opts.dataIsRenderer;
-
 	this.needsLayoutUpdate = true;
 	this.needsIndexerUpdate = true;
 
-	this._opts = opts;
+	this.onLayoutUpdated = new Signal();
+
 };
 
 
@@ -64,16 +69,16 @@ Layout.prototype = {
 
 			for( i = 0; i<this._data.length; i++ ){
 				data = this._data[i];
-				if( this._opts.dataIsRenderer ){
+				if( this._dataIsRenderer ){
 					obj = data;
 				}else{
 					obj = this._proxy.create( data );
-					this._proxy.data.set( obj, data );
+					this._proxy.data_set( obj, data );
 				}
 
-				this._layout( i, data, obj, prevObj, this._proxy, this._opts.layoutOpts );
+				this._layout( i, data, obj, prevObj, this._proxy, this.layoutOpts );
 
-				this._proxy.bounds.get( obj, bounds );
+				this._proxy.bounds_get( obj, bounds );
 
 				// bounds expand() ?
 				this.bounds.x = Math.min( bounds.left, this.bounds.left );

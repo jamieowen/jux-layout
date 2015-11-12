@@ -24,8 +24,8 @@ var grid = function( i, data, obj, prevObj, proxy, opts ){
 	var x = gx * opts.itemWidth + ( gx * opts.xSpacing );
 	var y = gy * opts.itemHeight + ( gy * opts.ySpacing );
 
-	proxy.position.set( obj, x, y );
-	proxy.size.set( obj, opts.itemWidth, opts.itemHeight );
+	proxy.position_set( obj, x, y );
+	proxy.size_set( obj, opts.itemWidth, opts.itemHeight );
 
 
 };

@@ -2,13 +2,13 @@
 var defaultOpts = {
 	itemWidth: 960,
 	itemHeight: 88,
-	ySpacing: 0
+	itemSpacing: 2
 };
 
 var vertical = function( i, data, obj, prevObj, proxy, opts ){
 
-	proxy.position.set( obj, 0 , i * opts.itemHeight + ( i * opts.ySpacing ) );
-	proxy.size.set( obj, opts.itemWidth, opts.itemHeight );
+	proxy.position_set( obj, 0 , i * opts.itemHeight + ( i * opts.itemSpacing ) );
+	proxy.size_set( obj, opts.itemWidth, opts.itemHeight );
 
 };
 

@@ -36,13 +36,13 @@ test( 'Layout Custom Inline.', function( t ){
 				y = i * lopts.itemHeight + ( i * lopts.itemSpacing );
 			}else{
 				// test previous obj access to set position.
-				proxy.position.get( prevObj, point );
-				proxy.size.get( prevObj, bounds );
+				proxy.position_get( prevObj, point );
+				proxy.size_get( prevObj, bounds );
 				y = point.y + bounds.height + lopts.itemSpacing;
 			}
 
-			proxy.position.set( obj, x, y );
-			proxy.size.set( obj, lopts.itemWidth, lopts.itemHeight );
+			proxy.position_set( obj, x, y );
+			proxy.size_set( obj, lopts.itemWidth, lopts.itemHeight );
 
 		}
 	});
@@ -78,8 +78,8 @@ test( 'Layout Custom Inline.', function( t ){
 	var actualPositions = [];
 	var actualSizes     = [];
 	for( var i = 0; i<data.length; i++ ){
-		layout._proxy.position.get( layout.objects[i], point );
-		layout._proxy.size.get( layout.objects[i], bounds );
+		layout._proxy.position_get( layout.objects[i], point );
+		layout._proxy.size_get( layout.objects[i], bounds );
 		actualPositions[ i*2 ] 	    = point.x;
 		actualPositions[ i*2+1 ] 	= point.y;
 		actualSizes[ i*2 ] 	    	= bounds.width;
