@@ -5,10 +5,10 @@ var defaultOpts = {
 	xSpacing: 0
 };
 
-var horizontal = function( i, data, obj, proxy, opts ){
+var horizontal = function( i, data, obj, prevObj, proxy, lopts ){
 
-	proxy.position.set( obj, i * opts.itemWidth + ( i * opts.xSpacing ), 0 );
-	proxy.size.set( obj, opts.itemWidth, opts.itemHeight );
+	proxy.position.set( obj, i * lopts.itemWidth + ( i * lopts.xSpacing ), 0 );
+	proxy.size.set( obj, lopts.itemWidth, lopts.itemHeight );
 
 };
 

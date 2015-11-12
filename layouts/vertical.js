@@ -5,7 +5,7 @@ var defaultOpts = {
 	ySpacing: 0
 };
 
-var vertical = function( i, data, obj, proxy, opts ){
+var vertical = function( i, data, obj, prevObj, proxy, opts ){
 
 	proxy.position.set( obj, 0 , i * opts.itemHeight + ( i * opts.ySpacing ) );
 	proxy.size.set( obj, opts.itemWidth, opts.itemHeight );

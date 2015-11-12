@@ -10,7 +10,7 @@ var defaultOpts = {
 	xSpacing: 0
 };
 
-var grid = function( i, data, obj, proxy, opts ){
+var grid = function( i, data, obj, prevObj, proxy, opts ){
 
 	if( opts.gridDirection === 'vertical' ){
 		var gx = i % opts.gridX;
