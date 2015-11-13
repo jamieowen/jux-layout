@@ -1,7 +1,9 @@
 
+var xFindIndex = require( './util/xFindIndex' );
 
 var pointHelper = { x:0, y:0 };
 var sizeHelper = { width: 0, height: 0 };
+
 
 var SingleAxis = function( axis ){
 	console.log( 'NEW SINGLE AXIS', axis );
@@ -15,34 +17,6 @@ SingleAxis.prototype = {
 	index: function( objects, proxy ){
 		this.clear();
 		this.objects = objects;
-	},
-
-	_xFindIndex: function( objects, vl, vr, left, right, maxDepth, proxy ){
-
-		var mid = Math.floor( ( right - left ) * 0.5 ) + left;
-		console.log( 'FIND ( left, right, mid ):', left, right, mid );
-		if( mid < 0 || mid >= objects.length ){
-			console.log( '----------- NOTHING FOUND' );
-			return null;
-		}
-
-		var object = objects[mid];
-		var x = proxy.x_get( object );
-		var w = proxy.width_get( object );
-		var r = x + w;
-
-		if( vl > r ){
-			return this._xFindIndex( objects, vl, vr, mid, right, maxDepth, proxy );
-		}else
-		if( vr < x ){
-			return this._xFindIndex( objects, vl, vr, left, mid, maxDepth, proxy );
-		}else
-		if( vl >= x ){
-			return mid;
-		}else{
-			return mid-1;
-		}
-
 	},
 
 	find: function( viewport, results, proxy ){
@@ -69,7 +43,7 @@ SingleAxis.prototype = {
 				}
 			}
 
-			var startIndex = this._xFindIndex(
+			var startIndex = xFindIndex(
 				this.objects,
 				viewport.left, viewport.right,
 				0, this.objects.length,

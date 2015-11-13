@@ -1,6 +1,8 @@
 
 var test = require( 'tape' );
 
+var horizontalLayout = require( './util/horizontalLayout' );
+
 var Layout 		= require( '../Layout' );
 var horizontal 	= require( '../layouts/horizontal' );
 var getActual 	= require( './util/getActual' );
@@ -29,7 +31,7 @@ test( 'Indexer Single Axis.', function( t ){
 	viewport.set( 330, 0, 200, 30 );
 	//viewport.set( 0, 0, 200, 30 );
 	//viewport.set( layout.bounds.right + 100, 0, 200, 30 ); // far right
-	viewport.set( layout.bounds.left - 500, 0, 200, 30 ); // far left
+	//viewport.set( layout.bounds.left - 500, 0, 200, 30 ); // far left
 
 	console.log( 'BOUNDS RIGHT : ', layout.bounds.right );
 	console.log( JSON.stringify( getActual( layout) ) );
