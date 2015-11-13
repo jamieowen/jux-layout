@@ -4,17 +4,7 @@ var Signal 		   = require( 'signals' );
 var Bounds 		   = require( 'jux-bounds');
 var DefaultProxy   = require( 'jux-bounds-proxy' );
 var DefaultLayout  = require( './layouts/horizontal' );
-var DefaultIndexer = require( './indexers/default' );
-
-var defaultOpts = function() {
-	return {
-		layout: DefaultLayout,
-		layoutOpts: DefaultLayout.defaultOpts,
-		proxy: new DefaultProxy(),
-		indexer: new DefaultIndexer(),
-		dataIsRenderer: false
-	};
-};
+var DefaultIndexer = require( './indexers/singleAxis' );
 
 var boundsHelper = new Bounds();
 
@@ -35,7 +25,7 @@ var Layout = function( data, optsOrLayout ){
 
 	this._data = data;
 	this._proxy = optsOrLayout.proxy || new DefaultProxy();
-	this._indexer = optsOrLayout.indexer || new DefaultIndexer();
+	this._indexer = optsOrLayout.indexer || new DefaultIndexer(0);
 	this._dataIsRenderer = optsOrLayout.dataIsRenderer === undefined ? false : optsOrLayout.dataIsRenderer;
 	this._results = [];
 
@@ -103,10 +93,10 @@ Layout.prototype = {
 	find: function( viewBounds, results ){
 
 		if( results ){
-			return this._indexer.find( viewBounds, results );
+			return this._indexer.find( viewBounds, results, this._proxy );
 		}else{
 			this._results.splice(0);
-			return this._indexer.find( viewBounds, this._results );
+			return this._indexer.find( viewBounds, this._results, this._proxy );
 		}
 
 	}
