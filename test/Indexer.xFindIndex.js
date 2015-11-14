@@ -1,7 +1,7 @@
 
 var test = require( 'tape' );
 
-var xFindIndex 				= require( '../indexers/util/xFindIndex' );
+var searchBounds = require( '../indexers/util/searchBounds' );
 var buildHorizontalLayout 	= require( './util/horizontalLayout' );
 
 var Bounds = require( 'jux-bounds' );
@@ -9,41 +9,49 @@ var Proxy  = require( 'jux-bounds-proxy' );
 
 test( 'X Find Index.', function( t ){
 
-	var layout = buildHorizontalLayout();
+	var layout = buildHorizontalLayout(); // each item's width is 100
 	var proxy  = new Proxy();
 	var viewport = new Bounds();
+	var objects = layout.objects;
 
-	console.log( layout.bounds );
+	viewport.set( 0,0,100,0 );
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 0 );
 
-	var startIndex,expected;
+	viewport.set( 50,0,100,0 );
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 0 );
 
-	// Given that the layout is 10 items horizontally,
-	// at width 100, the total width will be 1000.
-	// Iterate the viewport x 20 times moving 50 pixels each time.
+	viewport.set( 100,0,100,0 );
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 1 );
 
+	viewport.set( 101,0,100,0 );
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 1 );
+
+	viewport.set( 1000,0,100,0 );
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), -1 );
+
+	viewport.set( 1001,0,100,0 );
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), -1 );
+
+	/**
 	for( var i = 0; i<24; i++ ){
 
-		viewport.set( i * 50 - 100, 0, 200, 30 );
+		viewport.set( i * 50 - 100, 0, 100, 30 );
+		index = searchBounds.geLeft( objects, viewport, proxy );
 
-		/**startIndex = xFindIndex(
-			layout.objects,
-			viewport.left, viewport.right,
-			0, layout.objects.length,
-			3, proxy );**/
+		expected = i < 2 || i > 21 ? -1 : Math.floor( (i-2) / 2 );
 
-		//console.log( '\nstart...' );
-		startIndex = xFindIndex(
-			layout.objects,
-			0, layout.objects.length-1,
-			viewport.left, viewport.right,
-			proxy );
+		obj = objects[index];
 
-		console.log( 'i :', i, startIndex );
-		//var expected = i < 2 || i > 21 ? -1 : Math.floor( (i-2) / 2 );
+		console.log( 'index : ', index );
+		console.log( 'RETURNED : [ ' + proxy.x_get(obj) + ':' + proxy.width_get(obj) + ' ] - ' + viewport.left );
 
-		//t.equals( startIndex, expected, 'Returns correct start index for viewport X at : ' + startIndex + ' ' +  i + ', ' + viewport.x );
+		if( index !== undefined ){
 
-	}
+			//t.equals( index, expected, 'Returns correct start index for values : [ ' + proxy.x_get(obj) + ':' + proxy.width_get(obj) + ' ] - ' + viewport.left );
+		}else{
+			//t.equals( index, expected, 'Returns correct for out of bounds : ' + index + ' - ' + viewport.left );
+		}
+	}**/
 
 	t.end();
 

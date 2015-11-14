@@ -1,5 +1,5 @@
 
-var xFindIndex = require( './util/xFindIndex' );
+//var xFindIndex = require( './util/xFindIndex' );
 
 var pointHelper = { x:0, y:0 };
 var sizeHelper = { width: 0, height: 0 };
