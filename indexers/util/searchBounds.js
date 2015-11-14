@@ -28,10 +28,10 @@ module.exports = {
 		var first = objects[0];
 		var last = objects[ objects.length-1 ];
 
-		if( bounds.right < proxy.x_get( first ) ){
+		if( bounds.right <= proxy.x_get( first ) ){
 			return -1;
 		}else
-		if( bounds.left > proxy.x_get( last ) + proxy.width_get( last ) ){
+		if( bounds.left >= proxy.x_get( last ) + proxy.width_get( last ) ){
 			return -1;
 		}
 
@@ -51,10 +51,10 @@ module.exports = {
 		var first = objects[0];
 		var last = objects[ objects.length-1 ];
 
-		if( bounds.bottom < proxy.y_get( first ) ){
+		if( bounds.bottom <= proxy.y_get( first ) ){
 			return -1;
 		}else
-		if( bounds.top > proxy.y_get( last ) + proxy.height_get( last ) ){
+		if( bounds.top >= proxy.y_get( last ) + proxy.height_get( last ) ){
 			return -1;
 		}
 

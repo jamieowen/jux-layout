@@ -1,5 +1,4 @@
 
-
 var defaultOpts = {
 	gridX: 5,
 	gridY: 5,

@@ -11,40 +11,43 @@ test( 'Search Bounds Left.', function( t ){
 
 	var layout = horizontalLayout10x100(); // each item's width is 100
 	var proxy  = new Proxy();
-	var viewport = new Bounds();
+	var viewport = new Bounds(0,0,100,100);
 	var objects = layout.objects;
 
-	viewport.set( 0,0,100,0 );
-	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 0 );
-
-	viewport.set( 50,0,100,0 );
-	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 0 );
-
-	viewport.set( 100,0,100,0 );
-	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 1 );
-
-	viewport.set( 101,0,100,0 );
-	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 1 );
-
-	viewport.set( 200,0,100,0 );
-	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 2 );
-
-	viewport.set( 300,0,100,0 );
-	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 3 );
-
-	viewport.set( 400,0,100,0 );
-	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 4 );
-
-	viewport.set( 900,0,100,0 );
-	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 9 );
-
-	viewport.set( 950,0,100,0 );
-	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 9 );
-
-	viewport.set( 1000,0,100,0 );
+	viewport.x = -100;
 	t.equals( searchBounds.geLeft( objects, viewport, proxy ), -1 );
 
-	viewport.set( 1001,0,100,0 );
+	viewport.x = 0;
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 0 );
+
+	viewport.x = 50;
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 0 );
+
+	viewport.x = 100;
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 1 );
+
+	viewport.x = 101;
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 1 );
+
+	viewport.x = 200;
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 2 );
+
+	viewport.x = 300;
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 3 );
+
+	viewport.x = 400;
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 4 );
+
+	viewport.x = 900;
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 9 );
+
+	viewport.x = 950;
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), 9 );
+
+	viewport.x = 1000;
+	t.equals( searchBounds.geLeft( objects, viewport, proxy ), -1 );
+
+	viewport.x = 1001;
 	t.equals( searchBounds.geLeft( objects, viewport, proxy ), -1 );
 
 	t.end();

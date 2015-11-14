@@ -34,7 +34,7 @@ test( 'Layout Vertical.', function( t ){
 	t.equals( layout.needsLayoutUpdate, false, 'Layout is validated.' );
 
 	var b = layout.bounds;
-	t.deepEquals( [b.x, b.y, b.width, b.height],expectedBounds, 'Layout bounds are set.' );
+	t.deepEquals( [b.x, b.y, b.width, b.height], expectedBounds, 'Layout bounds are set.' );
 	t.equals( layout.objects.length, data.length, 'Layout objects are correct length.' );
 
 	var actual = getActual( layout );

@@ -3,8 +3,8 @@ var Signal 		   = require( 'signals' );
 
 var Bounds 		   = require( 'jux-bounds');
 var DefaultProxy   = require( 'jux-bounds-proxy' );
-var DefaultLayout  = require( './layouts/horizontal' );
-var DefaultIndexer = require( './indexers/singleAxis' );
+var DefaultLayout  = require( './layouts/vertical' );
+var DefaultIndexer = require( './indexers/binarySearch' );
 
 var boundsHelper = new Bounds();
 
@@ -93,10 +93,10 @@ Layout.prototype = {
 	find: function( viewBounds, results ){
 
 		if( results ){
-			return this._indexer.find( viewBounds, results, this._proxy );
+			return this._indexer.find( viewBounds, this._proxy, results );
 		}else{
 			this._results.splice(0);
-			return this._indexer.find( viewBounds, this._results, this._proxy );
+			return this._indexer.find( viewBounds, this._proxy, this._results );
 		}
 
 	}
