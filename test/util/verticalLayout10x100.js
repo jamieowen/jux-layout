@@ -1,6 +1,6 @@
 
 var Layout 		= require( '../../Layout' );
-var horizontal 	= require( '../../layouts/horizontal' );
+var vertical 	= require( '../../layouts/vertical' );
 
 module.exports = function verticalLayout(){
 
@@ -10,10 +10,10 @@ module.exports = function verticalLayout(){
 
 	// Test layout
 	var layout = new Layout( data, {
-		layout:horizontal,
+		layout:vertical,
 		layoutOpts:{
 			itemWidth: 100,
-			itemHeight: 30,
+			itemHeight: 100,
 			itemSpacing: 0
 		}
 	} );

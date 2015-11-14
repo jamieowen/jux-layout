@@ -12,7 +12,7 @@ var compareRight = function( obj, arg ){
 };
 
 var compareBottom = function( obj, arg ){
-	return arg.proxy.y_get( obj ) - arg.value;
+	return ( arg.proxy.y_get( obj ) + arg.proxy.height_get( obj ) ) - arg.value;
 };
 
 module.exports = {
@@ -42,12 +42,27 @@ module.exports = {
 		return res >= objects.length ? -1 : res;
 	},
 
-	geTop: function( objects, top, proxy, start, end ){
+	geTop: function( objects, bounds, proxy, start, end ){
+
+		if( objects.length === 0 ){
+			return -1;
+		}
+
+		var first = objects[0];
+		var last = objects[ objects.length-1 ];
+
+		if( bounds.bottom < proxy.y_get( first ) ){
+			return -1;
+		}else
+		if( bounds.top > proxy.y_get( last ) + proxy.height_get( last ) ){
+			return -1;
+		}
 
 		argHelper.proxy = proxy;
-		argHelper.value = top;
+		argHelper.value = bounds.top;
 
-		return gt( objects, argHelper, compareBottom, start, end );
-	}
+		var res = gt( objects, argHelper, compareBottom, start, end );
+		return res >= objects.length ? -1 : res;
+	},
 
 };

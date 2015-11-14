@@ -6,7 +6,6 @@ var sizeHelper = { width: 0, height: 0 };
 
 
 var SingleAxis = function( axis ){
-	console.log( 'NEW SINGLE AXIS', axis );
 	this.axis = axis === undefined ? 0 : axis;
 };
 
