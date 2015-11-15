@@ -18,6 +18,8 @@ module.exports = function verticalLayout(){
 		}
 	} );
 
+	layout.indexer.axis = 0;
+
 	layout.update();
 
 	return layout;

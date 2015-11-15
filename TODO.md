@@ -1,4 +1,3 @@
 
-- change setXXX functions to getter/setters
-- allowing of changing proxies / strategies?
-- pooling of layout objects between data/strategy updates?
+- Layouts as classes rather than function.
+- Layouts exposing an axis they operate on. ( or 1d, 2d )

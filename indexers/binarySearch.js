@@ -48,6 +48,28 @@ BinarySearch.prototype = {
 		}else
 		if( this.axis === 1 ){
 
+			idx = searchBounds.geTop( this.objects, viewBounds, proxy );
+
+			if( idx === -1 ){
+				return results;
+			}
+
+			results.push( objects[idx++] ); // first item is already in view
+			max = viewBounds.bottom;
+
+			while( !end && idx < objects.length ){
+				obj = objects[idx++];
+				min = proxy.y_get(obj);
+
+				if( min < max ){
+					results.push( obj );
+				}else{
+					end = true;
+				}
+			}
+
+			return results;
+
 		}
 
 

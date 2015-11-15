@@ -25,7 +25,7 @@ var Layout = function( data, optsOrLayout ){
 
 	this._data = data;
 	this._proxy = optsOrLayout.proxy || new DefaultProxy();
-	this._indexer = optsOrLayout.indexer || new DefaultIndexer(0);
+	this._indexer = optsOrLayout.indexer || new DefaultIndexer(1);
 	this._dataIsRenderer = optsOrLayout.dataIsRenderer === undefined ? false : optsOrLayout.dataIsRenderer;
 	this._results = [];
 
