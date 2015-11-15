@@ -30,6 +30,12 @@ var Layout = function( data, optsOrLayout ){
 	this._results = [];
 
 	this.bounds = new Bounds();
+	this.margin = {
+		left: 0,
+		top: 0,
+		right: 0,
+		bottom: 0
+	};
 	this.objects = [];
 	this.needsLayoutUpdate = true;
 	this.needsIndexerUpdate = true;
