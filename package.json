@@ -2,7 +2,7 @@
   "name": "jux-layout",
   "version": "1.0.0",
   "description": "",
-  "main": "DefaultIndexer.js",
+  "main": "Layout.js",
   "directories": {
     "test": "test"
   },
