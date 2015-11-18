@@ -11,17 +11,21 @@ var defaultOpts = {
 
 var grid = function( i, data, obj, prevObj, proxy, opts ){
 
+	var gx,gy;
+
 	if( opts.gridDirection === 'vertical' ){
-		var gx = i % opts.gridX;
-		var gy = i / opts.gridX;
+		gx = i % opts.gridX;
+		gy = Math.floor( i / opts.gridX );
 	}else
 	if( opts.gridDirection === 'horizontal' ){
-		var gx = i % opts.gridY;
-		var gy = i / opts.gridY;
+		gx = i % opts.gridY;
+		gy = Math.floor( i / opts.gridY );
 	}
 
 	var x = gx * opts.itemWidth + ( gx * opts.xSpacing );
 	var y = gy * opts.itemHeight + ( gy * opts.ySpacing );
+
+	console.log( gx, gy );
 
 	proxy.position_set( obj, x, y );
 	proxy.size_set( obj, opts.itemWidth, opts.itemHeight );
