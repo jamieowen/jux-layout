@@ -92,7 +92,7 @@ module.exports = function partitionObjects( objects, bounds, proxy, opts ){
 		p = tlPart.py + 1; // add one to avoid adding another row
 		pxy = tlPart.pxy;
 
-		// THIS BIT SHOULD GO ABOVE..
+		// THIS BIT SHOULD GO NESTED ABOVE..
 
 		while( p <= brPart.py ){
 
