@@ -13,9 +13,15 @@ test( 'Parition Objects.', function( t ){
 	var proxy  = new Proxy();
 	var objects = layout.objects;
 
-	var results = partitionObjects( objects, layout.bounds, proxy );
+	var results = partitionObjects( objects, layout.bounds, proxy, {
+		calcPartitionSizes: false
+	} );
 
-	console.log( results );
+	var res;
+	for( var i = 0; i<results.length; i++ ){
+		res = results[i];
+		console.log( 'RESULTS : (', res.idx, ')', 'px:', res.px, 'py:', res.py, ' < pxy:', res.pxy, '>' );
+	}
 
 	t.end();
 

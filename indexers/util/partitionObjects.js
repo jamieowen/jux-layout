@@ -54,7 +54,7 @@ module.exports = function partitionObjects( objects, bounds, proxy, opts ){
 
 	console.log( 'INFO', info );
 
-	var p,pxy;
+	var px,py,pxy;
 
 	for( i = 0; i<objects.length; i++ ){
 
@@ -70,44 +70,32 @@ module.exports = function partitionObjects( objects, bounds, proxy, opts ){
 		calcPartition( br, brPart, info );
 
 		// build x partition entries ( as objects can overlap partitions )
-		p = tlPart.px;
+		px = tlPart.px;
+		py = tlPart.py;
 		pxy = tlPart.pxy;
 
-		// TODO : WRONG!!!  NEED TO ITERATE THIS IN A NESTED LOOP!!!!
-		while( p <= brPart.px ){
+		// TODO : CHECCK LESS THAN OR EQUALS
 
-			entry = {
-				idx: i,
-				info: info,
-				object: object,
-				px: p++,
-				py: tlPart.py,
-				pxy: pxy++
-			};
+		console.log( 'CHECK : ', i, px , py, brPart.px, tlPart.py );
+		for( px = 0; px < brPart.px - tlPart.px; px++ ){
+			for( py = 0; py < brPart.py - tlPart.py; py++ ){
 
-			results.push( entry );
+				entry = {
+					idx: i,
+					info: info,
+					object: object,
+					px: tlPart.px + px,
+					py: tlPart.py + py,
+					pxy: null
+				};
 
-		}
+				entry.pxy = entry.px + ( entry.py * info.partitionX );
 
-		p = tlPart.py + 1; // add one to avoid adding another row
-		pxy = tlPart.pxy;
+				results.push( entry );
 
-		// THIS BIT SHOULD GO NESTED ABOVE..
+			}
 
-		while( p <= brPart.py ){
-
-			entry = {
-				idx: i,
-				info: info,
-				object: object,
-				px: tlPart.px,
-				py: p++,
-				pxy: pxy += info.partitionX // add x size to drop a partition row
-			};
-
-			results.push( entry );
-
-		}
+		};
 
 	}
 
