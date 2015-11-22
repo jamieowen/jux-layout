@@ -12,8 +12,8 @@ module.exports = function partitionObjects( objects, bounds, proxy, opts ){
 
 	opts = opts || {};
 
-	var partitionWidth = 64 || opts.partitionWidth;
-	var partitionHeight = 64 || opts.partitionHeight;
+	var partitionWidth = opts.partitionWidth || 64;
+	var partitionHeight = opts.partitionHeight || 64;
 
 	var i,object,entry;
 	var size = { width: 0, height: 0 };
@@ -52,8 +52,6 @@ module.exports = function partitionObjects( objects, bounds, proxy, opts ){
 
 	var results = [];
 
-	console.log( 'INFO', info );
-
 	var px,py,pxy;
 
 	for( i = 0; i<objects.length; i++ ){
@@ -63,22 +61,29 @@ module.exports = function partitionObjects( objects, bounds, proxy, opts ){
 		proxy.position_get( object, tl );
 		proxy.size_get( object, size );
 
+		// calc partition for both top left and bottom right points.
 		br.x = tl.x + size.width;
 		br.y = tl.y + size.height;
 
 		calcPartition( tl, tlPart, info );
 		calcPartition( br, brPart, info );
 
-		// build x partition entries ( as objects can overlap partitions )
 		px = tlPart.px;
 		py = tlPart.py;
 		pxy = tlPart.pxy;
 
-		// TODO : CHECCK LESS THAN OR EQUALS
+		// prevent objects that align perfectly with
+		// partitions being included 4 times.
 
-		console.log( 'CHECK : ', i, px , py, brPart.px, tlPart.py );
-		for( px = 0; px < brPart.px - tlPart.px; px++ ){
-			for( py = 0; py < brPart.py - tlPart.py; py++ ){
+		if( tl.x % partitionWidth === 0 && size.width / partitionWidth === 1 ){
+			brPart.px--;
+		}
+		if( tl.y % partitionHeight=== 0 && size.height / partitionHeight === 1 ){
+			brPart.py--;
+		}
+
+		for( px = 0; px <= brPart.px - tlPart.px; px++ ){
+			for( py = 0; py <= brPart.py - tlPart.py; py++ ){
 
 				entry = {
 					idx: i,
@@ -94,9 +99,7 @@ module.exports = function partitionObjects( objects, bounds, proxy, opts ){
 				results.push( entry );
 
 			}
-
-		};
-
+		}
 	}
 
 	return results;

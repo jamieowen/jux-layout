@@ -5,3 +5,5 @@
 - look at points and sizes passed to set, being objects
 - also differentiate using bounds objects to pass data. this is a confusing api...
 - Should the Proxy hold a Pooling / Factory instance?
+- Proxies should expose left,right,top,bottom access.
+- If above then, go through rest of Layout classes and update.
