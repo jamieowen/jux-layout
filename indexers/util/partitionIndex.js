@@ -1,19 +1,19 @@
 /**
  * Create a partition index to store the first index of each partition.
  *
- * @param partitionObjects
+ * @param partitionedObjects
  */
-module.exports = function partitionIndexed( partitionObjects, sort ){
+module.exports = function partitionIndexed( partitionedObjects, sort ){
 
 	var index = [];
 	var partition;
 
 	if( sort ){
-		partitionObjects.objects.sort( sortMethod );
+		partitionedObjects.objects.sort( sortMethod );
 	}
 
-	for( var i = 0; i<partitionObjects.objects.length; i++ ){
-		partition = partitionObjects.objects[i];
+	for( var i = 0; i<partitionedObjects.objects.length; i++ ){
+		partition = partitionedObjects.objects[i];
 		if( index[ partition.pxy ] === undefined ){
 			index[ partition.pxy ] = i;
 		}

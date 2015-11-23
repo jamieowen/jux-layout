@@ -79,7 +79,7 @@ module.exports = {
 	 * @param start
 	 * @param end
 	 */
-	geTopLeft: function( partitionedObjects, bounds, proxy, start, end ){
+	geTopLeft: function( partitionedObjects, partitionIndex, bounds, proxy, start, end ){
 
 		if( partitionedObjects.length === 0 ){
 			return -1;
