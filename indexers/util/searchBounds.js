@@ -65,4 +65,7 @@ module.exports = {
 		return res >= objects.length ? -1 : res;
 	},
 
+	getTopLeft: function( objects, bounds, proxy, start, end ){
+		
+	}
 };
