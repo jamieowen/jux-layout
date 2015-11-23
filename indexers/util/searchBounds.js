@@ -15,6 +15,12 @@ var compareBottom = function( obj, arg ){
 	return ( arg.proxy.y_get( obj ) + arg.proxy.height_get( obj ) ) - arg.value;
 };
 
+var comparePartition = function( obj, arg ){
+	return obj.pxy;
+
+	//return ( arg.proxy.y_get( obj ) + arg.proxy.height_get( obj ) ) - arg.value;
+};
+
 module.exports = {
 
 	binarySearch: binarySearch,
@@ -65,7 +71,21 @@ module.exports = {
 		return res >= objects.length ? -1 : res;
 	},
 
-	getTopLeft: function( objects, bounds, proxy, start, end ){
-		
+	/**
+	 *
+	 * @param partitionedObjects Should be formatted using util.partitionObjects
+	 * @param bounds
+	 * @param proxy
+	 * @param start
+	 * @param end
+	 */
+	geTopLeft: function( partitionedObjects, bounds, proxy, start, end ){
+
+		if( partitionedObjects.length === 0 ){
+			return -1;
+		}
+
+		// top left partition
+		var pxy = bounds.left;
 	}
 };

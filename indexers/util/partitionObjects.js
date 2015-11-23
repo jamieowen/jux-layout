@@ -52,6 +52,11 @@ module.exports = function partitionObjects( objects, bounds, proxy, opts ){
 
 	var results = [];
 
+	var resultObject = {
+		info: info,
+		objects: results
+	};
+
 	var px,py,pxy;
 
 	for( i = 0; i<objects.length; i++ ){
@@ -87,7 +92,6 @@ module.exports = function partitionObjects( objects, bounds, proxy, opts ){
 
 				entry = {
 					idx: i,
-					info: info,
 					object: object,
 					px: tlPart.px + px,
 					py: tlPart.py + py,
@@ -102,11 +106,11 @@ module.exports = function partitionObjects( objects, bounds, proxy, opts ){
 		}
 	}
 
-	return results;
+	return resultObject;
 
 };
 
-var calcPartition = function( point, to, info ){
+var calcPartition = module.exports.calcPartition = function( point, to, info ){
 
 	to.px  = Math.floor( point.x / info.partitionWidth ),
 	to.py  = Math.floor( point.y / info.partitionHeight ),
