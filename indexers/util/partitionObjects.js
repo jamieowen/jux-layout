@@ -78,12 +78,12 @@ module.exports = function partitionObjects( objects, bounds, proxy, opts ){
 		pxy = tlPart.pxy;
 
 		// prevent objects that align perfectly with
-		// partitions being included 4 times.
+		// partitions being included multiple times when bounds might be <= to x or y
 
-		if( tl.x % partitionWidth === 0 && size.width / partitionWidth === 1 ){
+		if( br.x % partitionWidth === 0 ){
 			brPart.px--;
 		}
-		if( tl.y % partitionHeight=== 0 && size.height / partitionHeight === 1 ){
+		 if( br.y % partitionHeight === 0 ){
 			brPart.py--;
 		}
 
@@ -99,7 +99,6 @@ module.exports = function partitionObjects( objects, bounds, proxy, opts ){
 				};
 
 				entry.pxy = entry.px + ( entry.py * info.partitionX );
-
 				results.push( entry );
 
 			}

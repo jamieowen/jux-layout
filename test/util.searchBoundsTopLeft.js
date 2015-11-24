@@ -1,29 +1,33 @@
 
 var test = require( 'tape' );
 
+var searchBounds 		= require( '../indexers/util/searchBounds' );
 var partitionObjects 	= require( '../indexers/util/partitionObjects' );
 var partitionIndex 		= require( '../indexers/util/partitionIndex' );
 var gridLayout100x100 	= require( './util/gridLayout100x100' );
 
-var searchBounds
-
 var Bounds = require( 'jux-bounds' );
 var Proxy  = require( 'jux-bounds-proxy' );
 
-test( 'Indexer Binary Search Top Left.', function( t ){
+test( 'Search Bounds Top Left.', function( t ){
 
 	var layout = gridLayout100x100(); // each item's width is 100
 	var proxy  = new Proxy();
+	var viewport = new Bounds(0,0,100,100);
 	var objects = layout.objects;
 
-	var result = partitionObjects( objects, layout.bounds, proxy, {
+	var partitioned = partitionObjects( objects, layout.bounds, proxy, {
 		calcPartitionSizes: true
 	} );
 
-	// create the index.
-	var index = partitionIndex( result, true );
+	var partitionedIndex = partitionIndex( partitioned );
 
+	console.log( partitioned, partitionedIndex );
 
+	viewport.x = -100;
+	viewport.y = -100;
+	//t.equals( searchBounds.geLeft( objects, viewport, proxy ), -1 );
 
 	t.end();
+
 });
