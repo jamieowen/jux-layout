@@ -111,8 +111,8 @@ module.exports = function partitionObjects( objects, bounds, proxy, opts ){
 
 var calcPartition = module.exports.calcPartition = function( point, to, info ){
 
-	to.px  = Math.floor( point.x / info.partitionWidth ),
-	to.py  = Math.floor( point.y / info.partitionHeight ),
+	to.px  = Math.floor( point.x / info.partitionWidth );
+	to.py  = Math.floor( point.y / info.partitionHeight );
 	to.pxy = to.px + ( to.py * info.partitionX );
 
 };

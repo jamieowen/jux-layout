@@ -22,11 +22,14 @@ test( 'Search Bounds Top Left.', function( t ){
 
 	var partitionedIndex = partitionIndex( partitioned );
 
-	console.log( partitioned, partitionedIndex );
+	console.log( 'PARTITIONED: ', partitioned );
+	console.log( 'PARTITION INDEX : ', partitionedIndex );
 
 	viewport.x = -100;
 	viewport.y = -100;
-	//t.equals( searchBounds.geLeft( objects, viewport, proxy ), -1 );
+
+	t.equals( searchBounds.geTopLeft( partitioned,partitionIndex, viewport, proxy ), -1 );
+
 
 	t.end();
 

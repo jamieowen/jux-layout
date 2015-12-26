@@ -21,9 +21,6 @@ test( 'Partition Objects -calcParitionSizes.', function( t ){
 	// create the index.
 	var index = partitionIndex( result, true );
 
-	var toArray = function( partObject ){
-		return [ partObject.px, partObject.py, partObject.pxy ];
-	};
 
 	var info = result.info;
 	var results = result.objects;
@@ -39,6 +36,10 @@ test( 'Partition Objects -calcParitionSizes.', function( t ){
 	t.equals( results.length, 10, 'Results length ok' );
 
 	var m = 'Partition assigned correctly.';
+
+	var toArray = function( partObject ){
+		return [ partObject.px, partObject.py, partObject.pxy ];
+	};
 
 	t.deepEquals( toArray( results[0] ), [ 0,0,0 ], m );
 
