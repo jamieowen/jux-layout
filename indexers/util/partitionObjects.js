@@ -1,4 +1,6 @@
 
+var calcPartition = require( './calcPartition' );
+
 /**
  *
  * Generate a flat 1d array indexing the 2d objects by partition index.
@@ -106,13 +108,5 @@ module.exports = function partitionObjects( objects, bounds, proxy, opts ){
 	}
 
 	return resultObject;
-
-};
-
-var calcPartition = module.exports.calcPartition = function( point, to, info ){
-
-	to.px  = Math.floor( point.x / info.partitionWidth );
-	to.py  = Math.floor( point.y / info.partitionHeight );
-	to.pxy = to.px + ( to.py * info.partitionX );
 
 };
